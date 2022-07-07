@@ -298,9 +298,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBeforeSpawnAllies: 2
   increaseAllieAtStart: 1
-  layerBatPrincipal:
-    serializedVersion: 2
-    m_Bits: 64
-  circleToSpawnUnderBatPrincipal: {fileID: 8078154642148265304, guid: 1cea89300be8c3046a821c237a4d3258, type: 3}
-  wrongCircleToSpawnUnderBat: {fileID: 8078154642148265304, guid: d7111ea729c2ed04185d3742fd182a7b, type: 3}
+  numberOfAlliesInBat: 0
   batLinked: []

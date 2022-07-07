@@ -10,11 +10,18 @@ public class AllieManager : MonoBehaviour
 
     [HideInInspector] public Vector3 batToGoPos;
 
+    [HideInInspector] public GameObject goDontCollideWith;
+    
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out BatManager batManager))
+        if (other.gameObject != goDontCollideWith)
         {
-            batManager.numberOfAlliesInBat++;
+            if (other.TryGetComponent(out BatManager batManager))
+            {
+                Debug.Log(other);
+                batManager.IncreaseNumberAllies(damage);
+                gameObject.SetActive(false);
+            }
         }
     }
 

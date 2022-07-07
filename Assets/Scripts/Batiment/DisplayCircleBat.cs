@@ -8,7 +8,6 @@ using UnityEngine;
 public class DisplayCircleBat : MonoBehaviour
 {
     [SerializeField] private LayerMask layerBatPrincipal;
-    [SerializeField] private LayerMask layerWall;
     [SerializeField] private GameObject circleToSpawnUnderBatPrincipal;
     [SerializeField] private GameObject wrongCircleToSpawnUnderBat;
 
@@ -42,20 +41,32 @@ public class DisplayCircleBat : MonoBehaviour
             // Does the ray intersect any objects excluding the player layer
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, layerBatPrincipal))
             {
-                var hitPos = hit.transform.position;
-                circleToSpawnUnderBatPrincipal.transform.position = new Vector3(hitPos.x, 0.01f, hitPos.z);
-                circleToSpawnUnderBatPrincipal.SetActive(true);
-                _firstBatGo = hit.collider.gameObject;
-                _isBatPrincipalTouched = true;  
+                if (hit.collider.TryGetComponent(out BatManager batManager))
+                {
+                    if (batManager.numberOfAlliesInBat > 0)
+                    {
+                        var hitPos = hit.transform.position;
+                        circleToSpawnUnderBatPrincipal.transform.position = new Vector3(hitPos.x, 0.01f, hitPos.z);
+                        circleToSpawnUnderBatPrincipal.SetActive(true);
+                        _firstBatGo = hit.collider.gameObject;
+                        _isBatPrincipalTouched = true;  
+                    }
+                }
             }
         }
         if (Input.GetMouseButtonUp(0))
         {
             if (_secondBatTouched && _firstBatGo != null)
             {
-                _firstBatGo.TryGetComponent(out BatManager spawnAlliesInBat);
-                spawnAlliesInBat.batLinked.Add(_secondBatGo.transform.position);
-                spawnAlliesInBat.CanLaunchAllie();
+                if(_firstBatGo.TryGetComponent(out BatManager batManager))
+                {
+                    if (batManager.numberOfAlliesInBat > 0)
+                    {
+                        var secondBatPos = _secondBatGo.transform.position;
+                        batManager.batLinked.Add(secondBatPos);
+                        batManager.CanLaunchAllie();
+                    }
+                }
             }
             
             if (circleToSpawnUnderBatPrincipal != null)
@@ -77,11 +88,14 @@ public class DisplayCircleBat : MonoBehaviour
 
                 if (Physics.Raycast(ray, out var hitBat, Mathf.Infinity, layerBatPrincipal))
                 {
-                    var hitPos = hitBat.transform.position;
-                    _circleToSpawnUnderOtherBat.transform.position = new Vector3(hitPos.x, 0.01f, hitPos.z);
-                    _circleToSpawnUnderOtherBat.SetActive(true);
-                    _secondBatGo = hitBat.collider.gameObject;
-                    _secondBatTouched = true;
+                    if (hitBat.collider.name != _firstBatGo.name)
+                    {
+                        var hitPos = hitBat.transform.position;
+                        _circleToSpawnUnderOtherBat.transform.position = new Vector3(hitPos.x, 0.01f, hitPos.z);
+                        _circleToSpawnUnderOtherBat.SetActive(true);
+                        _secondBatGo = hitBat.collider.gameObject;
+                        _secondBatTouched = true;
+                    }
                 }
                 else if (Physics.Raycast(ray, out var hit, Mathf.Infinity))
                 {
