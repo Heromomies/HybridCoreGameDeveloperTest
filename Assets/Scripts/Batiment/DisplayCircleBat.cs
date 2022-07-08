@@ -10,6 +10,7 @@ public class DisplayCircleBat : MonoBehaviour
     [SerializeField] private LayerMask layerBatPrincipal;
     [SerializeField] private GameObject circleToSpawnUnderBatPrincipal;
     [SerializeField] private GameObject wrongCircleToSpawnUnderBat;
+    [SerializeField] private Transform transformLookAt;
 
     private GameObject _circleToSpawnUnderOtherBat;
     private GameObject _firstBatGo, _secondBatGo;
@@ -62,6 +63,7 @@ public class DisplayCircleBat : MonoBehaviour
                 {
                     if (batManager.numberOfAlliesInBat > 0)
                     {
+                        CreatePathAndDisplayShader(_firstBatGo.transform.position, _secondBatGo.transform.position);
                         var secondBatPos = _secondBatGo.transform.position;
                         batManager.batLinked.Add(secondBatPos);
                         batManager.CanLaunchAllie();
@@ -107,6 +109,21 @@ public class DisplayCircleBat : MonoBehaviour
             }
         }
         
+    }
+
+    void CreatePathAndDisplayShader(Vector3 startingPos, Vector3 finalPos)
+    {
+        var distance = Vector3.Distance(startingPos, finalPos);
+        distance = (int) distance;
+        transformLookAt.position = startingPos;
+        transformLookAt.LookAt(finalPos); 
+        
+        for (int i = 0; i < distance/2; i++)
+        {
+            var v = new Vector3(transformLookAt.localPosition.x - i - i, 0.01f, transformLookAt.localPosition.z);
+            
+            PoolManager.Instance.SpawnObjectFromPool("ArrowDirection", v, transformLookAt.localRotation, transformLookAt);
+        }
     }
     
 }

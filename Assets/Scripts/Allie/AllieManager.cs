@@ -8,18 +8,30 @@ public class AllieManager : MonoBehaviour
     public float speed;
     public int damage;
 
+    private float _startSpeed;
+    private int _startDamage;
+    
     [HideInInspector] public Vector3 batToGoPos;
 
     [HideInInspector] public GameObject goDontCollideWith;
-    
+
+    private void Start()
+    {
+        _startDamage = damage;
+        _startSpeed = speed;
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject != goDontCollideWith)
         {
             if (other.TryGetComponent(out BatManager batManager))
             {
-                Debug.Log(other);
-                batManager.IncreaseNumberAllies(damage);
+                for (int i = 0; i < damage; i++)
+                {
+                    batManager.IncreaseNumberAllies();
+                }
+                speed = _startSpeed;
+                damage = _startDamage;
                 gameObject.SetActive(false);
             }
         }

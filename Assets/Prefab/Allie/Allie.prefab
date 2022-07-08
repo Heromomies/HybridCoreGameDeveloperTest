@@ -127,5 +127,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  damage: 0
+  damage: 1
   batToGoPos: {x: 0, y: 0, z: 0}
+  goDontCollideWith: {fileID: 0}

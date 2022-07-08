@@ -7,10 +7,11 @@ public class BatManager : MonoBehaviour
 {
     [SerializeField] private float timeBeforeSpawnAllies;
     [SerializeField] private bool increaseAllieAtStart;
-
+    public int numberOfAlliesInBat;
+    
     private int _possibleLinks = 1;
     private int _pathLinked;
-    public int numberOfAlliesInBat;
+    
     private TextMeshPro _textDisplayNumberOfAllies;
     [HideInInspector] public List<Vector3> batLinked;
 
@@ -23,10 +24,10 @@ public class BatManager : MonoBehaviour
             InvokeRepeating(nameof(IncreaseNumberAllies), 0f, timeBeforeSpawnAllies);
     }
 
-    public void IncreaseNumberAllies(int numberToAdd)
+    public void IncreaseNumberAllies()
     {
-        numberToAdd += 1;
-        numberOfAlliesInBat += numberToAdd;
+       
+        numberOfAlliesInBat ++;
         _textDisplayNumberOfAllies.text = $"{numberOfAlliesInBat}";
 
         if (numberOfAlliesInBat > 10)
