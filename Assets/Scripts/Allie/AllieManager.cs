@@ -32,6 +32,10 @@ public class AllieManager : MonoBehaviour
                 }
                 speed = _startSpeed;
                 damage = _startDamage;
+                
+                batManager.ChangeMaterial();
+                GameManager.Instance.CheckIfBatAreCorrupted();
+                
                 gameObject.SetActive(false);
             }
         }

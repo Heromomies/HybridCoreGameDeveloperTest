@@ -7,11 +7,14 @@ public class BatManager : MonoBehaviour
 {
     [SerializeField] private float timeBeforeSpawnAllies;
     [SerializeField] private bool increaseAllieAtStart;
+    [SerializeField] private Material blueMaterial;
     [HideInInspector] public int numberOfAlliesInBat;
-    
+    [HideInInspector] public bool batCorrupted;
+
     private int _possibleLinks = 1;
     private int _pathLinked;
 
+    private MeshRenderer _meshRenderer;
     private TextMeshPro _textDisplayNumberOfAllies;
     [HideInInspector] public List<Vector3> batLinked;
 
@@ -19,13 +22,22 @@ public class BatManager : MonoBehaviour
     void Start()
     {
         _textDisplayNumberOfAllies = GetComponentInChildren<TextMeshPro>();
-       
-        if(increaseAllieAtStart)
+        _meshRenderer = GetComponent<MeshRenderer>();
+
+        if (increaseAllieAtStart)
+        {
+            batCorrupted = true;
             InvokeRepeating(nameof(IncreaseNumberAllies), 0f, timeBeforeSpawnAllies);
+        }
     }
 
     public void IncreaseNumberAllies()
     {
+        if (!batCorrupted)
+        {
+            batCorrupted = true;
+        }
+        
         numberOfAlliesInBat ++;
         _textDisplayNumberOfAllies.text = $"{numberOfAlliesInBat}";
 
@@ -37,6 +49,11 @@ public class BatManager : MonoBehaviour
         {
             _possibleLinks++;
         }
+    }
+
+    public void ChangeMaterial()
+    {
+        _meshRenderer.material = blueMaterial;
     }
     
     public void CanLaunchAllie()
